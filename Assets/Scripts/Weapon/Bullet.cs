@@ -28,6 +28,7 @@ public class Bullet : MonoBehaviour
         gameObject.SetActive(false);
 
     }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.GetComponentInParent<EnemyHealth>())

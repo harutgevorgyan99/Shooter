@@ -7,6 +7,7 @@ public class EnemyHealth : MonoBehaviour
     public float health;
     RagdollManager ragdollManager;
     [HideInInspector] public bool isDead;
+    [SerializeField]Enemy enemy;
 
     private void Start()
     {
@@ -25,6 +26,11 @@ public class EnemyHealth : MonoBehaviour
 
     void EnemyDeath()
     {
+        enemy.DeteacheListeners();
+        enemy.enabled = false;
+        enemy.agent.enabled = false;
+       
+        enemy.anim.enabled = false;
         ragdollManager.TriggerRagdoll();
         Debug.Log("Death");
     }

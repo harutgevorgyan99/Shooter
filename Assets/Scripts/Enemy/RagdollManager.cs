@@ -5,7 +5,6 @@ using UnityEngine;
 public class RagdollManager : MonoBehaviour
 {
     Rigidbody[] rbs;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +14,7 @@ public class RagdollManager : MonoBehaviour
 
     public void TriggerRagdoll()
     {
+     
         foreach (Rigidbody rb in rbs) rb.isKinematic = false ;
     }
 }
