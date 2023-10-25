@@ -5,31 +5,31 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     [Header("Fire Rate")]
-    [SerializeField] float fireRate;
-    [SerializeField] bool semiAuto;
-    float fireRateTimer;
+    [SerializeField]protected float fireRate;
+    [SerializeField] protected bool semiAuto;
+    protected float fireRateTimer;
 
     [Header("Bullet Properties")]
-    [SerializeField] GameObject bullet;
-    [SerializeField] Transform barrelPos;
-    [SerializeField] float bulletVelocity;
-    [SerializeField] int bulletsPerShot;
+    [SerializeField] protected GameObject bullet;
+    [SerializeField] protected Transform barrelPos;
+    [SerializeField] protected float bulletVelocity;
+    [SerializeField] protected int bulletsPerShot;
     public float damage = 20;
-    AimStateManager aim;
+    protected AimStateManager aim;
 
-    [SerializeField] AudioClip gunShot;
+    [SerializeField] protected AudioClip gunShot;
     [HideInInspector] public AudioSource audioSource;
     [HideInInspector] public WeaponAmmo ammo;
-    ActionStateManager actions;
-    WeaponRecoil recoil;
+     ActionStateManager actions;
+    protected WeaponRecoil recoil;
 
-    Light muzzleFlashLight;
-    ParticleSystem muzzleFlashParticles;
-    float lightIntensity;
-    [SerializeField] float lightReturnSpeed=20;
+    protected Light muzzleFlashLight;
+    protected ParticleSystem muzzleFlashParticles;
+    protected float lightIntensity;
+    [SerializeField] protected float lightReturnSpeed=20;
 
     public float enemyKickbackForce = 100;
-    WeaponManager weaponClass;
+    protected WeaponManager weaponClass;
 
     // Start is called before the first frame update
     void Start()
@@ -65,7 +65,7 @@ public class Weapon : MonoBehaviour
         muzzleFlashLight.intensity = Mathf.Lerp(muzzleFlashLight.intensity, 0, lightReturnSpeed * Time.deltaTime);
     }
 
-    bool ShouldFire()
+    public virtual bool ShouldFire()
     {
         fireRateTimer += Time.deltaTime;
         if (fireRateTimer < fireRate) return false;
@@ -76,7 +76,7 @@ public class Weapon : MonoBehaviour
         return false;
     }
 
-    void Fire()
+    public virtual void Fire()
     {
         fireRateTimer = 0;
         ammo.currentAmmo--;

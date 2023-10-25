@@ -17,12 +17,13 @@ public class Enemy : MonoBehaviour
     [HideInInspector] public float currentMoveSpeed=1;
     [HideInInspector] public float hzInput;
     [HideInInspector] public float vInput;
+    [HideInInspector] public EnemyWeapon weapon;
     #region states
 
-    private AttackingState attacking = new AttackingState();
+    [HideInInspector] public AttackingState attacking = new AttackingState();
     private ChaseState chaseState = new ChaseState();
     private PatrolingState patrolingState = new PatrolingState();
-    private EnemyStates currentStates;
+    [HideInInspector] public EnemyStates currentStates;
     //Patroling
     [HideInInspector]public Vector3 walkPoint;
     [HideInInspector]public bool walkPointSet;
@@ -66,19 +67,19 @@ public class Enemy : MonoBehaviour
         currentStates.UpdateState(this);
     }
 
-    private void Patroling()
-    {
-        if (!walkPointSet) SearchWalkPoint();
+    //private void Patroling()
+    //{
+    //    if (!walkPointSet) SearchWalkPoint();
 
-        if (walkPointSet)
-            agent.SetDestination(walkPoint);
+    //    if (walkPointSet)
+    //        agent.SetDestination(walkPoint);
 
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
+    //    Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
-        //Walkpoint reached
-        if (distanceToWalkPoint.magnitude < 1f)
-            walkPointSet = false;
-    }
+    //    //Walkpoint reached
+    //    if (distanceToWalkPoint.magnitude < 1f)
+    //        walkPointSet = false;
+    //}
     public void SearchWalkPoint()
     {
         //Calculate random point in range
@@ -91,29 +92,29 @@ public class Enemy : MonoBehaviour
             walkPointSet = true;
     }
 
-    private void ChasePlayer()
-    {
-        transform.LookAt(player);
-        agent.SetDestination(player.position*currentMoveSpeed);
-    }
+    //private void ChasePlayer()
+    //{
+    //    transform.LookAt(player);
+    //    agent.SetDestination(player.position*currentMoveSpeed);
+    //}
 
-    public void AttackPlayer()
-    {
-        //Make sure enemy doesn't move
-        agent.SetDestination(transform.position);
+    //public void AttackPlayer()
+    //{
+    //    //Make sure enemy doesn't move
+    //    agent.SetDestination(transform.position);
 
-        transform.LookAt(player);
+    //    transform.LookAt(player);
 
-        if (!alreadyAttacked)
-        {
-            ///Attack code here
-            Debug.Log("detected");
-            ///End of attack code
+    //    if (!alreadyAttacked)
+    //    {
+    //        ///Attack code here
+    //        Debug.Log("detected");
+    //        ///End of attack code
 
-            alreadyAttacked = true;
-            Invoke(nameof(ResetAttack), timeBetweenAttacks);
-        }
-    }
+    //        alreadyAttacked = true;
+    //        Invoke(nameof(ResetAttack), timeBetweenAttacks);
+    //    }
+    //}
     public void ResetAttack()
     {
         alreadyAttacked = false;

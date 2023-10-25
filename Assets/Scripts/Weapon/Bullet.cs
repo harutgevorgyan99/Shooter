@@ -43,6 +43,16 @@ public class Bullet : MonoBehaviour
                 enemyHealth.isDead = true;
             }
         }
+        if (collision.gameObject.GetComponent<Player>())
+        {
+            Player pl = collision.gameObject.GetComponent<Player>();
+            pl.TakeDamage(weapon.damage);
+
+            if (pl.health <= 0 && pl.isDead == false)
+            {
+                pl.isDead = true;
+            }
+        }
         ObjectPooling.Instance.onObjectReachDestination?.Invoke();
     }
 }
