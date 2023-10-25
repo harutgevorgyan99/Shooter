@@ -44,7 +44,7 @@ public class WeaponAmmo : MonoBehaviour
     }
     public void Reset()
     {
-        extraAmmo *= 3;
+        extraAmmo = clipSize*3;
         currentAmmo = clipSize;
     }
 }

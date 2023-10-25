@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     [SerializeField] Animator anim;
     private Vector3 startPose;
     public float health;
+    public float money=0;
     [HideInInspector] public float currentHelath;
     [HideInInspector] public bool isDead;
     [SerializeField] private RagdollManager ragdollManager;
@@ -15,7 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] private MovementStateManager movementState;
     [SerializeField] private AimStateManager aimState;
     [SerializeField] private ActionStateManager actionStateManager;
-    [SerializeField] private WeaponManager weaponManager;
+     public WeaponManager weaponManager;
     #endregion
     public UnityEvent OnDead;
     public UnityEvent OnRespown;
@@ -23,7 +24,9 @@ public class Player : MonoBehaviour
     {
         GameActionManager.Instance.OnPlayerDead.AddListener(PlayerDeath);
         GameActionManager.Instance.OnRestartGame.AddListener(RespawnPlayer);
-        currentHelath=health;
+        GameActionManager.Instance.OnPauseGame.AddListener(PauseGame);
+        GameActionManager.Instance.OnReplayGame.AddListener(ReplayGame);
+        currentHelath =health;
         startPose = transform.position;
     }
     public void TakeDamage(float damage)
@@ -35,7 +38,14 @@ public class Player : MonoBehaviour
             else Debug.Log("Hit");
         }
     }
-
+    public void PauseGame()
+    {
+        ChangePlayerRelatedComponentsStatus(false);
+    }
+    public void ReplayGame()
+    {
+        ChangePlayerRelatedComponentsStatus(true);
+    }
     public void RespawnPlayer()
     {
         currentHelath = health;

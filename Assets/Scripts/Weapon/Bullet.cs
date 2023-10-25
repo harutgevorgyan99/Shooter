@@ -41,6 +41,7 @@ public class Bullet : MonoBehaviour
                 Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
                 rb.AddForce(dir * weapon.enemyKickbackForce, ForceMode.Impulse);
                 enemy.isDead = true;
+                GameActionManager.Instance.player.money++;
             }
         }
        if (collision.gameObject.GetComponentInParent<Player>())
@@ -51,6 +52,7 @@ public class Bullet : MonoBehaviour
             if (pl.currentHelath <= 0 && pl.isDead == false)
             {
                 pl.isDead = true;
+                GameActionManager.Instance.player.money=0;
             }
         }
         ObjectPooling.Instance.onObjectReachDestination?.Invoke();

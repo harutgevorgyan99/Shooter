@@ -9,12 +9,14 @@ public class WeaponManager : MonoBehaviour
     public Transform recoilFollowPos;
     ActionStateManager actions;
     public Weapon currentWeapon;
+    public Weapon standartWeapon;
     [SerializeField] Transform weaponParent;
     [SerializeField] Transform weaponPlace;
     private void Start()
     {
         if (actions == null) actions = GetComponent<ActionStateManager>();
         actions.SetWeapon(currentWeapon);
+        GameActionManager.Instance.OnRestartGame.AddListener(Reset);
     }
     public void SetCurrentWeapon(Weapon weapon)
     {
@@ -28,5 +30,10 @@ public class WeaponManager : MonoBehaviour
         currentWeapon.transform.localScale = weaponPlace.localScale;
         currentWeapon.gameObject.SetActive(true);
         actions.SetWeapon(currentWeapon);
+    }
+
+    public void Reset()
+    {
+        SetCurrentWeapon(standartWeapon);
     }
 }
