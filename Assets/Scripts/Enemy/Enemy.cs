@@ -6,9 +6,9 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     public NavMeshAgent agent;
-
-    public Transform player;
-
+    public int indexOfPrefab;
+    [HideInInspector] public Transform playerTransform;
+    [HideInInspector] public Player player;
     public LayerMask whatIsGround, whatIsPlayer;
 
     public Animator anim;
@@ -18,6 +18,15 @@ public class Enemy : MonoBehaviour
     [HideInInspector] public float hzInput;
     [HideInInspector] public float vInput;
     [HideInInspector] public EnemyWeapon weapon;
+
+    public RagdollManager ragdollManager;
+    [HideInInspector] public bool isDead;
+    #region EnemyInitialParams
+    private Vector3 startPose;
+    private float health;
+    private float damage;
+    [HideInInspector] public float currentHelth;
+    #endregion
     #region states
 
     [HideInInspector] public AttackingState attacking = new AttackingState();
@@ -39,13 +48,7 @@ public class Enemy : MonoBehaviour
     private bool playerInSightRange, playerInAttackRange;
     #endregion
 
-    private void Start()
-    {
-        player = GameActionManager.Instance.player.transform;
-        agent = GetComponent<NavMeshAgent>();
-        EnemyManager.Instance.ChekingPlayerPosition.AddListener(ChekingPlayerPosition);
-        SwitchState(patrolingState);
-    }
+
     public void SwitchState(EnemyStates  enemyState)
     {
         if (currentStates == enemyState)
@@ -61,25 +64,11 @@ public class Enemy : MonoBehaviour
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
-        if (!playerInSightRange && !playerInAttackRange) /*Patroling();//*/ SwitchState(patrolingState);
-        if (playerInSightRange && !playerInAttackRange) SwitchState(chaseState);// ChasePlayer();
-        if (playerInAttackRange && playerInSightRange) SwitchState(attacking);// AttackPlayer();
+        if (!playerInSightRange && !playerInAttackRange || player.isDead) /*Patroling();//*/ SwitchState(patrolingState);
+        if (playerInSightRange && !playerInAttackRange && !player.isDead) SwitchState(chaseState);// ChasePlayer();
+        if (playerInAttackRange && playerInSightRange && !player.isDead) SwitchState(attacking);// AttackPlayer();
         currentStates.UpdateState(this);
     }
-
-    //private void Patroling()
-    //{
-    //    if (!walkPointSet) SearchWalkPoint();
-
-    //    if (walkPointSet)
-    //        agent.SetDestination(walkPoint);
-
-    //    Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
-    //    //Walkpoint reached
-    //    if (distanceToWalkPoint.magnitude < 1f)
-    //        walkPointSet = false;
-    //}
     public void SearchWalkPoint()
     {
         //Calculate random point in range
@@ -91,30 +80,6 @@ public class Enemy : MonoBehaviour
         if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
             walkPointSet = true;
     }
-
-    //private void ChasePlayer()
-    //{
-    //    transform.LookAt(player);
-    //    agent.SetDestination(player.position*currentMoveSpeed);
-    //}
-
-    //public void AttackPlayer()
-    //{
-    //    //Make sure enemy doesn't move
-    //    agent.SetDestination(transform.position);
-
-    //    transform.LookAt(player);
-
-    //    if (!alreadyAttacked)
-    //    {
-    //        ///Attack code here
-    //        Debug.Log("detected");
-    //        ///End of attack code
-
-    //        alreadyAttacked = true;
-    //        Invoke(nameof(ResetAttack), timeBetweenAttacks);
-    //    }
-    //}
     public void ResetAttack()
     {
         alreadyAttacked = false;
@@ -123,7 +88,64 @@ public class Enemy : MonoBehaviour
     {
         EnemyManager.Instance.ChekingPlayerPosition.RemoveListener(ChekingPlayerPosition);
     }
+    public void TakeDamage(float damage)
+    {
+        if (currentHelth > 0)
+        {
+            currentHelth -= damage;
+            if (currentHelth <= 0) EnemyDeath();
+            else Debug.Log("Hit");
+        }
+    }
 
+    void EnemyDeath()
+    {
+        DeteacheListeners();
+        ChangeEnemyRelatedComponentsStatus(false);
+        ragdollManager.TriggerRagdoll();
+        SetObjcetsBackToPoolingObjectsCollection();
+        EnemyManager.Instance.OnEnemyDead?.Invoke();
+        Debug.Log("Death");
+    }
+    public void Init(Vector3 startPose, float health, float damage)
+    {
+        this.startPose = startPose;
+        this.health = health;
+        this.damage = damage;
+
+        transform.position = startPose;
+        currentHelth = health;
+        weapon.damage = damage;
+        player = GameActionManager.Instance.player;
+        playerTransform = player.transform;
+        agent = GetComponent<NavMeshAgent>();
+        EnemyManager.Instance.ChekingPlayerPosition.AddListener(ChekingPlayerPosition);
+        SwitchState(patrolingState);
+    }
+    void ChangeEnemyRelatedComponentsStatus(bool status)
+    {
+        weapon.enabled = status;
+        enabled = status;
+        anim.enabled = status;
+        agent.enabled = status;
+    }
+    public void SetObjcetsBackToPoolingObjectsCollection()
+    {
+
+        
+        ObjectPooling.Instance.poolingObjects[indexOfPrefab].Enqueue(this);
+        
+
+    }
+    public void Reset()
+    {
+        transform.position = startPose;
+        currentHelth = health;
+        weapon.damage = damage;
+        ChangeEnemyRelatedComponentsStatus(true);
+        EnemyManager.Instance.ChekingPlayerPosition.AddListener(ChekingPlayerPosition);
+        ragdollManager.Reset();
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

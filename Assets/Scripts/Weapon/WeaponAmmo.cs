@@ -15,6 +15,7 @@ public class WeaponAmmo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameActionManager.Instance.OnRestartGame.AddListener(Reset);
         currentAmmo = clipSize;
     }
 
@@ -40,5 +41,10 @@ public class WeaponAmmo : MonoBehaviour
                 extraAmmo = 0;
             }
         }
+    }
+    public void Reset()
+    {
+        extraAmmo *= 3;
+        currentAmmo = clipSize;
     }
 }

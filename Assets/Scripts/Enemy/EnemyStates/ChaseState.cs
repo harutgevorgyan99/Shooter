@@ -14,9 +14,9 @@ public class ChaseState : EnemyStates
         enemy.anim.SetFloat("hzInput", 1);
         enemy.anim.SetFloat("vInput", 1);
         enemy.agent.speed = enemy.runSpeed;
-        enemy.transform.LookAt(enemy.player);
+        enemy.transform.LookAt(enemy.playerTransform);
         enemy.transform.localEulerAngles -= new Vector3(0, 45, 0); //45 is offset
-        enemy.agent.SetDestination(enemy.player.position );
+        enemy.agent.SetDestination(enemy.playerTransform.position );
        // enemy.transform.LookAt(enemy.player);
     }
 }

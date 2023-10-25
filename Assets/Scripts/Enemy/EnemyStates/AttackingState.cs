@@ -13,8 +13,8 @@ public class AttackingState : EnemyStates
         //Make sure enemy doesn't move
         enemy.agent.SetDestination(enemy.transform.position);
 
-        enemy.transform.LookAt(enemy.player);
-        enemy.transform.localEulerAngles += new Vector3(0, 45, 0);
+        enemy.transform.LookAt(enemy.playerTransform);
+        enemy.transform.localEulerAngles += new Vector3(0, 35, 0);
         enemy.anim.SetFloat("hzInput", 0f);
         enemy.anim.SetFloat("vInput", 0f);
         enemy.agent.speed = 0;

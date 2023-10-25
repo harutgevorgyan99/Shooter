@@ -14,6 +14,7 @@ public class WeaponManager : MonoBehaviour
     private void Start()
     {
         if (actions == null) actions = GetComponent<ActionStateManager>();
+        actions.SetWeapon(currentWeapon);
     }
     public void SetCurrentWeapon(Weapon weapon)
     {

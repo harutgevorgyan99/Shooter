@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] float timeToDestroy;
+    
     [HideInInspector] public Weapon weapon;
     [HideInInspector] public Vector3 dir;
     [HideInInspector] public int indexOfPrefab;
@@ -31,24 +31,24 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.GetComponentInParent<EnemyHealth>())
+        if (collision.gameObject.GetComponentInParent<Enemy>())
         {
-            EnemyHealth enemyHealth = collision.gameObject.GetComponentInParent<EnemyHealth>();
-            enemyHealth.TakeDamage(weapon.damage);
+            Enemy enemy = collision.gameObject.GetComponentInParent<Enemy>();
+            enemy.TakeDamage(weapon.damage);
 
-            if(enemyHealth.health<=0 && enemyHealth.isDead == false)
+            if(enemy.currentHelth<=0 && enemy.isDead == false)
             {
                 Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
                 rb.AddForce(dir * weapon.enemyKickbackForce, ForceMode.Impulse);
-                enemyHealth.isDead = true;
+                enemy.isDead = true;
             }
         }
-        if (collision.gameObject.GetComponent<Player>())
+       if (collision.gameObject.GetComponentInParent<Player>())
         {
-            Player pl = collision.gameObject.GetComponent<Player>();
+            Player pl = collision.gameObject.GetComponentInParent<Player>();
             pl.TakeDamage(weapon.damage);
 
-            if (pl.health <= 0 && pl.isDead == false)
+            if (pl.currentHelath <= 0 && pl.isDead == false)
             {
                 pl.isDead = true;
             }

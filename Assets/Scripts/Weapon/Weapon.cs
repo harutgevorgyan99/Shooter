@@ -92,10 +92,11 @@ public class Weapon : MonoBehaviour
             Bullet currentBullet = ObjectPooling.Instance.GetObjectFromStorage(bullet);
 
             currentBullet.Init(barrelPos.position, barrelPos.rotation, this);
+            currentBullet.transform.forward = barrelPos.transform.forward;
             currentBullet.dir = barrelPos.transform.forward;
             currentBullet.gameObject.SetActive(true);
             Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
-            rb.AddForce(barrelPos.forward * bulletVelocity, ForceMode.Impulse);
+            rb.velocity=(barrelPos.forward * bulletVelocity);
         }
     }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyWeapon : Weapon
 {
     Enemy weaponOwner;
-    void Start()
+    void Awake()
     {
         weaponOwner = GetComponentInParent<Enemy>();
         if (weaponOwner != null)
@@ -54,8 +54,8 @@ public class EnemyWeapon : Weapon
         fireRateTimer = 0;
         ammo.currentAmmo--;
 
-        barrelPos.LookAt(weaponOwner.player);
-
+        barrelPos.LookAt(weaponOwner.playerTransform);
+        barrelPos.transform.localEulerAngles = new Vector3(0, barrelPos.transform.localEulerAngles.y, barrelPos.transform.localEulerAngles.z);
         audioSource.PlayOneShot(gunShot);
         TriggerMuzzleFlash();
  
@@ -68,7 +68,7 @@ public class EnemyWeapon : Weapon
             currentBullet.dir = barrelPos.transform.forward;
             currentBullet.gameObject.SetActive(true);
             Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
-            rb.AddForce(barrelPos.forward * bulletVelocity, ForceMode.Impulse);
+            rb.velocity = (barrelPos.forward * bulletVelocity);
         }
     }
 

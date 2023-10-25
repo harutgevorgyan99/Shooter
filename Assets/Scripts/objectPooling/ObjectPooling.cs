@@ -3,26 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ObjectPooling : MonoBehaviour
+public class ObjectPooling : Singleton<ObjectPooling>
 {
-    public static ObjectPooling Instance;
-
-    public Dictionary<int, Queue<Bullet>> poolingObjects = new Dictionary<int, Queue<Bullet>>();
+    public Dictionary<int, Queue<object>> poolingObjects = new Dictionary<int, Queue<object>>();
     public GameObject bulletPrefab;
     public Transform startPosition;
     public UnityEvent onObjectReachDestination;
 
     private void Awake()
-    {
-        Instance = this;
-        CreatePoolingObjects(bulletPrefab, startPosition, 30);
+    { 
+        CreatePoolingObjectsForBullets(bulletPrefab, 30);
     }
-    private void CreatePoolingObjects(GameObject prefab, Transform transform, int countOfObjects)
+    private void CreatePoolingObjectsForBullets(GameObject prefab, int countOfObjects)
     {
         int indexOfPrefab = prefab.GetInstanceID();
         if (!poolingObjects.ContainsKey(indexOfPrefab))
         {
-            poolingObjects.Add(indexOfPrefab, new Queue<Bullet>());
+            poolingObjects.Add(indexOfPrefab, new Queue<object>());
         }
 
         for (int i = 0; i < countOfObjects; i++)
@@ -30,19 +27,45 @@ public class ObjectPooling : MonoBehaviour
             GameObject g = Instantiate(prefab);
             g.transform.SetParent(startPosition);
             g.SetActive(false);
-            Bullet ball = g.GetComponent<Bullet>();
-            ball.indexOfPrefab = indexOfPrefab;
+            Bullet bullet = g.GetComponent<Bullet>();
+            bullet.indexOfPrefab = indexOfPrefab;
             poolingObjects[indexOfPrefab].Enqueue(g.GetComponent<Bullet>());
         }
     }
+    public void CreatePoolingObjectsForEnemys(GameObject prefab, Transform enemysParent, int countOfObjects)
+    {
+        int indexOfPrefab = prefab.GetInstanceID();
+        if (!poolingObjects.ContainsKey(indexOfPrefab))
+        {
+            poolingObjects.Add(indexOfPrefab, new Queue<object>());
+        }
 
+        for (int i = 0; i < countOfObjects; i++)
+        {
+            GameObject g = Instantiate(prefab);
+            g.transform.SetParent(enemysParent);
+         
+            Enemy enemy = g.GetComponent<Enemy>();
+            enemy.indexOfPrefab = indexOfPrefab;
+            poolingObjects[indexOfPrefab].Enqueue(g.GetComponent<Enemy>());
+        }
+    }
+    public Enemy GetEnemyFromStorage(GameObject prefab)
+    {
+        int indexOfPrefab = prefab.GetInstanceID();
+        if (!poolingObjects.ContainsKey(indexOfPrefab) || poolingObjects[indexOfPrefab].Count == 0)
+        {
+            CreatePoolingObjectsForBullets(prefab, 10);
+        }
+        return (Enemy)poolingObjects[indexOfPrefab].Dequeue();
+    }
     public Bullet GetObjectFromStorage(GameObject prefab)
     {
         int indexOfPrefab = prefab.GetInstanceID();
         if (!poolingObjects.ContainsKey(indexOfPrefab) || poolingObjects[indexOfPrefab].Count==0)
         {
-            CreatePoolingObjects(prefab, startPosition, 10);
+            CreatePoolingObjectsForBullets(prefab, 10);
         }
-        return poolingObjects[indexOfPrefab].Dequeue();
+        return (Bullet)poolingObjects[indexOfPrefab].Dequeue();
     }
 }

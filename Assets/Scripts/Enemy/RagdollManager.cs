@@ -17,4 +17,8 @@ public class RagdollManager : MonoBehaviour
      
         foreach (Rigidbody rb in rbs) rb.isKinematic = false ;
     }
+    public void Reset()
+    {
+        foreach (Rigidbody rb in rbs) rb.isKinematic = true;
+    }
 }
