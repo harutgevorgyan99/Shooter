@@ -39,13 +39,14 @@ public class Shop : MonoBehaviour
     {
         player.money -= weapon.price;
         player.weaponManager.SetCurrentWeapon(weapon.weapon);
-      
+        player.ShowPlayerMoneyInUI();
         UpdateBuyButtonStatus();
     }
     public void BuyBullets(BulletForSale bullet)
     {
         player.money -= bullet.price;
         player.weaponManager.currentWeapon.ammo.extraAmmo+=bullet.bulletCount;
+        player.ShowPlayerMoneyInUI();
         UpdateBuyButtonStatus();
     }
 }

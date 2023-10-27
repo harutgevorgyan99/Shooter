@@ -42,6 +42,7 @@ public class Bullet : MonoBehaviour
                 rb.AddForce(dir * weapon.enemyKickbackForce, ForceMode.Impulse);
                 enemy.isDead = true;
                 GameActionManager.Instance.player.money++;
+                GameActionManager.Instance.player.ShowPlayerMoneyInUI();
             }
         }
        if (collision.gameObject.GetComponentInParent<Player>())

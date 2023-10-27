@@ -2,20 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] Animator anim;
     private Vector3 startPose;
-    public float health;
+    public int health;
     public float money=0;
-    [HideInInspector] public float currentHelath;
+    [HideInInspector] public int currentHelath;
     [HideInInspector] public bool isDead;
     [SerializeField] private RagdollManager ragdollManager;
     #region PlayerRelatedScripts
     [SerializeField] private MovementStateManager movementState;
-    [SerializeField] private AimStateManager aimState;
+    [SerializeField] private AimStateManager aimState; 
     [SerializeField] private ActionStateManager actionStateManager;
+    [SerializeField] private Text helthInUI;
+    [SerializeField] private Text moneyInUi;
      public WeaponManager weaponManager;
     #endregion
     public UnityEvent OnDead;
@@ -28,14 +31,19 @@ public class Player : MonoBehaviour
         GameActionManager.Instance.OnReplayGame.AddListener(ReplayGame);
         currentHelath =health;
         startPose = transform.position;
+        GameActionManager.Instance.OnRestartGame.AddListener(ShowHelthInUI);
+        GameActionManager.Instance.OnStartGame.AddListener(ShowHelthInUI);
+        GameActionManager.Instance.OnStartGame.AddListener(ShowPlayerMoneyInUI);
+        GameActionManager.Instance.OnRestartGame.AddListener(ShowPlayerMoneyInUI);
     }
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
         if (currentHelath > 0)
         {
             currentHelath -= damage;
             if (currentHelath <= 0) GameActionManager.Instance.OnPlayerDead?.Invoke();
             else Debug.Log("Hit");
+            ShowHelthInUI();
         }
     }
     public void PauseGame()
@@ -69,5 +77,13 @@ public class Player : MonoBehaviour
         aimState.enabled = status;
         actionStateManager.enabled = status;
         anim.enabled = status;
+    }
+    public void ShowHelthInUI()
+    {
+        helthInUI.text = currentHelath.ToString();
+    }
+    public void ShowPlayerMoneyInUI()
+    {
+        moneyInUi.text = money.ToString();
     }
 }

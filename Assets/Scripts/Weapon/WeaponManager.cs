@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.UI;
 
 public class WeaponManager : MonoBehaviour
 {
@@ -12,11 +13,14 @@ public class WeaponManager : MonoBehaviour
     public Weapon standartWeapon;
     [SerializeField] Transform weaponParent;
     [SerializeField] Transform weaponPlace;
+    [SerializeField] Text bulletsCountinUI;
     private void Start()
     {
         if (actions == null) actions = GetComponent<ActionStateManager>();
         actions.SetWeapon(currentWeapon);
         GameActionManager.Instance.OnRestartGame.AddListener(Reset);
+        GameActionManager.Instance.OnRestartGame.AddListener(ShowPlayerBulletsCountInUI);
+        GameActionManager.Instance.OnStartGame.AddListener(ShowPlayerBulletsCountInUI);
     }
     public void SetCurrentWeapon(Weapon weapon)
     {
@@ -31,7 +35,10 @@ public class WeaponManager : MonoBehaviour
         currentWeapon.gameObject.SetActive(true);
         actions.SetWeapon(currentWeapon);
     }
-
+    public void ShowPlayerBulletsCountInUI()
+    {
+        bulletsCountinUI.text = $"{currentWeapon.ammo.currentAmmo}/{currentWeapon.ammo.extraAmmo}"; 
+    }
     public void Reset()
     {
         SetCurrentWeapon(standartWeapon);

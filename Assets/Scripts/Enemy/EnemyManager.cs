@@ -10,7 +10,7 @@ public class EnemyManager : Singleton<EnemyManager>
     [SerializeField] private Transform enemysParent;
     [SerializeField] int enemyCountInScene;
     [SerializeField] float enemyRespawnTime;
-    [SerializeField] float maxHealth, minHealth, maxDamage, minDmage;
+    [SerializeField] int maxHealth, minHealth, maxDamage, minDmage;
     public List<Transform> possibleEnemyPlaces = new List<Transform>();
     private List<Enemy> enemysInScene = new List<Enemy>();
     public UnityEvent OnEnemyDead;
@@ -24,8 +24,8 @@ public class EnemyManager : Singleton<EnemyManager>
 
            Enemy enemmy= ObjectPooling.Instance.GetEnemyFromStorage(enemePrefab);
            Vector3 startPose = (i < possibleEnemyPlaces.Count) ? possibleEnemyPlaces[i].position : possibleEnemyPlaces[Random.Range(0, possibleEnemyPlaces.Count - 1)].position;
-           float damage = Random.Range(minDmage, maxDamage);
-           float health = Random.Range(minHealth, maxHealth);
+           int damage = Random.Range(minDmage, maxDamage);
+           int health = Random.Range(minHealth, maxHealth);
            enemmy.Init(startPose, health, damage);
            enemysInScene.Add(enemmy);
         }

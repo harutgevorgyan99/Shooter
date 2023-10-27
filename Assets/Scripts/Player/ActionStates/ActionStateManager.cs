@@ -10,7 +10,7 @@ public class ActionStateManager : MonoBehaviour
     public ReloadState Reload = new ReloadState();
     public DefaultState Default = new DefaultState();
 
-
+    [SerializeField] private WeaponManager weaponManager;
     [HideInInspector]public WeaponAmmo ammo;
     AudioSource audioSource;
 
@@ -41,6 +41,7 @@ public class ActionStateManager : MonoBehaviour
     public void WeaponReloaded()
     {
         ammo.Reload();
+        weaponManager.ShowPlayerBulletsCountInUI();
         rHandAim.weight = 1;
         lHandIK.weight = 1;
         SwitchState(Default);

@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
     #region EnemyInitialParams
     private Vector3 startPose;
     private float health;
-    private float damage;
+    private int damage;
     [HideInInspector] public float currentHelth;
     #endregion
     #region states
@@ -36,8 +36,8 @@ public class Enemy : MonoBehaviour
     //Patroling
     [HideInInspector]public Vector3 walkPoint;
     [HideInInspector]public bool walkPointSet;
-    public float walkPointRange;
-
+    public float walkPointRangeMax;
+    public float walkPointRangeMin;
     //Attacking
     public float timeBetweenAttacks;
     [HideInInspector] public bool alreadyAttacked;
@@ -72,8 +72,8 @@ public class Enemy : MonoBehaviour
     public void SearchWalkPoint()
     {
         //Calculate random point in range
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
+        float randomZ = Random.Range(walkPointRangeMin, walkPointRangeMax);
+        float randomX = Random.Range(walkPointRangeMin, walkPointRangeMax);
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
@@ -107,7 +107,7 @@ public class Enemy : MonoBehaviour
         EnemyManager.Instance.OnEnemyDead?.Invoke();
         Debug.Log("Death");
     }
-    public void Init(Vector3 startPose, float health, float damage)
+    public void Init(Vector3 startPose, float health, int damage)
     {
         this.startPose = startPose;
         this.health = health;
@@ -139,6 +139,7 @@ public class Enemy : MonoBehaviour
     }
     public void Reset()
     {
+        isDead = false;
         transform.position = startPose;
         currentHelth = health;
         weapon.damage = damage;

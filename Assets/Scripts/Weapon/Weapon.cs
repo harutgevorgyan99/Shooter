@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected Transform barrelPos;
     [SerializeField] protected float bulletVelocity;
     [SerializeField] protected int bulletsPerShot;
-    public float damage = 20;
+    public int damage = 20;
     protected AimStateManager aim;
 
     [SerializeField] protected AudioClip gunShot;
@@ -98,6 +98,7 @@ public class Weapon : MonoBehaviour
             Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
             rb.velocity=(barrelPos.forward * bulletVelocity);
         }
+        weaponClass.ShowPlayerBulletsCountInUI();
     }
 
     void TriggerMuzzleFlash()

@@ -297,7 +297,7 @@ MonoBehaviour:
   barrelPos: {fileID: 1232608195981010404}
   bulletVelocity: 500
   bulletsPerShot: 1
-  damage: 20
+  damage: 30
   gunShot: {fileID: 8300000, guid: f7a99641aaa885543bfd6e0124605c89, type: 3}
   audioSource: {fileID: 0}
   ammo: {fileID: 0}

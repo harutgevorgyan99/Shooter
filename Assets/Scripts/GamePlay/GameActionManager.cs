@@ -11,6 +11,12 @@ public class GameActionManager : Singleton<GameActionManager>
     public UnityEvent OnPlayerWin;
     public UnityEvent OnPauseGame;
     public UnityEvent OnReplayGame;
+    public UnityEvent OnStartGame;
+
+    private void Start()
+    {
+        OnStartGame?.Invoke();
+    }
     public void RestartGame()
     {
         OnRestartGame?.Invoke();
