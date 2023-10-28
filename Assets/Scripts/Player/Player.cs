@@ -21,8 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Text moneyInUi;
      public WeaponManager weaponManager;
     #endregion
-    public UnityEvent OnDead;
-    public UnityEvent OnRespown;
+    [HideInInspector] public UnityEvent OnRespown;
     private void Start()
     {
         GameActionManager.Instance.OnPlayerDead.AddListener(PlayerDeath);

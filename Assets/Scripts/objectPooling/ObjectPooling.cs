@@ -8,7 +8,7 @@ public class ObjectPooling : Singleton<ObjectPooling>
     public Dictionary<int, Queue<object>> poolingObjects = new Dictionary<int, Queue<object>>();
     public GameObject bulletPrefab;
     public Transform startPosition;
-    public UnityEvent onObjectReachDestination;
+    [HideInInspector]public UnityEvent onObjectReachDestination;
 
     private void Awake()
     { 

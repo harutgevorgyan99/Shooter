@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class EnemyManager : Singleton<EnemyManager>
 {
-    public UnityEvent ChekingPlayerPosition;
+    [HideInInspector] public UnityEvent ChekingPlayerPosition;
     [SerializeField] private GameObject enemePrefab;
     [SerializeField] private Transform enemysParent;
     [SerializeField] int enemyCountInScene;
@@ -13,7 +13,7 @@ public class EnemyManager : Singleton<EnemyManager>
     [SerializeField] int maxHealth, minHealth, maxDamage, minDmage;
     public List<Transform> possibleEnemyPlaces = new List<Transform>();
     private List<Enemy> enemysInScene = new List<Enemy>();
-    public UnityEvent OnEnemyDead;
+    [HideInInspector] public UnityEvent OnEnemyDead;
     private void Start()
     {
         ObjectPooling.Instance.CreatePoolingObjectsForEnemys(enemePrefab, enemysParent, enemyCountInScene);

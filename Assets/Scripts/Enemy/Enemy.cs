@@ -75,7 +75,7 @@ public class Enemy : MonoBehaviour
         float randomZ = Random.Range(walkPointRangeMin, walkPointRangeMax);
         float randomX = Random.Range(walkPointRangeMin, walkPointRangeMax);
 
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        walkPoint = new Vector3(randomX, transform.position.y, randomZ);
 
         if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
             walkPointSet = true;

@@ -9,9 +9,9 @@ public class GameActionManager : Singleton<GameActionManager>
     public UnityEvent OnPlayerDead;
     public UnityEvent OnRestartGame;
     public UnityEvent OnPlayerWin;
-    public UnityEvent OnPauseGame;
-    public UnityEvent OnReplayGame;
-    public UnityEvent OnStartGame;
+    [HideInInspector] public UnityEvent OnPauseGame;
+    [HideInInspector] public UnityEvent OnReplayGame;
+    [HideInInspector] public UnityEvent OnStartGame;
 
     private void Start()
     {
