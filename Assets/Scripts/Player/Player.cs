@@ -22,14 +22,16 @@ public class Player : MonoBehaviour
      public WeaponManager weaponManager;
     #endregion
     [HideInInspector] public UnityEvent OnRespown;
+    
     private void Start()
     {
+        currentHelath = health;
+        startPose = transform.position;
+      
         GameActionManager.Instance.OnPlayerDead.AddListener(PlayerDeath);
         GameActionManager.Instance.OnRestartGame.AddListener(RespawnPlayer);
         GameActionManager.Instance.OnPauseGame.AddListener(PauseGame);
         GameActionManager.Instance.OnReplayGame.AddListener(ReplayGame);
-        currentHelath =health;
-        startPose = transform.position;
         GameActionManager.Instance.OnRestartGame.AddListener(ShowHelthInUI);
         GameActionManager.Instance.OnStartGame.AddListener(ShowHelthInUI);
         GameActionManager.Instance.OnStartGame.AddListener(ShowPlayerMoneyInUI);
@@ -55,11 +57,15 @@ public class Player : MonoBehaviour
     }
     public void RespawnPlayer()
     {
+       
+       
+        isDead = false;
         currentHelath = health;
         transform.position=startPose;
-        isDead = false;
         ChangePlayerRelatedComponentsStatus(true);
         ragdollManager.Reset();
+        
+
     }
     public void PlayerDeath()
     {

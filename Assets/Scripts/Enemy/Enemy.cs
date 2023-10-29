@@ -118,7 +118,7 @@ public class Enemy : MonoBehaviour
         weapon.damage = damage;
         player = GameActionManager.Instance.player;
         playerTransform = player.transform;
-        agent = GetComponent<NavMeshAgent>();
+        agent.enabled=true;
         EnemyManager.Instance.ChekingPlayerPosition.AddListener(ChekingPlayerPosition);
         SwitchState(patrolingState);
     }
